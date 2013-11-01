@@ -1,0 +1,36 @@
+/* This stylesheet is used to style the public view of the plugin. */
+
+.mareon-anomalies-home > .home-content {
+	display: inline-block;
+	vertical-align: top;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 10px;
+	width: 25%;
+	margin-left: -4px;
+}
+
+.mareon-anomalies-home .home-content > a {
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+.mareon-anomalies-home img {
+	display: block;
+	width: 100%;
+}
+
+.mareon-anomalies-home .home-meta {
+	position: absolute;
+	bottom: -100%;
+	left: 0%;
+	background-color: rgba(255,255,255, .5);
+	width: 100%;
+	text-align: center;
+	transition: bottom 1s;
+}
+
+.mareon-anomalies-home .home-content > a:hover > .home-meta {
+	bottom: 0%;
+}

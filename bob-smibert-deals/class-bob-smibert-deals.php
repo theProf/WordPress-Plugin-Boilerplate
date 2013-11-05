@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name.
+ * Bob Smibert Deals.
  *
  * @package   Bob_Smibert_Deals
  * @author    Your Name <email@example.com>
@@ -75,11 +75,8 @@ class Bob_Smibert_Deals {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		/* Define custom functionality.
-		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		 */
-		add_action( 'TODO', array( $this, 'action_method_name' ) );
-		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
+		add_shortcode( 'bob_smibert_deals_monthly' , array( $this, 'shortcode_monthly' ) );
+		add_shortcode( 'bob_smibert_deals_student' , array( $this, 'shortcode_student' ) );
 
 	}
 
@@ -277,32 +274,117 @@ class Bob_Smibert_Deals {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'js/public.js', __FILE__ ), array( 'jquery' ), self::VERSION );
-	}
+	}	
+	
+	public function shortcode_monthly() {
+		$settings = get_option( 'settings' );
 
-	/**
-	 * NOTE:  Actions are points in the execution of a page or process
-	 *        lifecycle that WordPress fires.
-	 *
-	 *        Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// TODO: Define your action hook callback here
-	}
+		dbgx_trace_var($settings);
+		ob_start();
+		?>
+		<article id='monthly-deals' class=''>
+		<h2><?php echo $settings['deal-title'] ?></h2>
+		<ul>
+			<li>
+				<strong><?php echo $settings['deal-1']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-1']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-1']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-1']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li>
+			<li>
+				<strong><?php echo $settings['deal-2']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-2']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-2']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-2']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li><li>
+				<strong><?php echo $settings['deal-3']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-3']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-3']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-3']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li>
+		</ul>
+	</article>
+		
+	<?php 
+		$content = "[wp_cart:Session Deals:price:[Options";
+		
+		$free = $settings['deal-1']['free'] > 0 ? " + " . $settings['deal-1']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-1']['title'] . " @ $" . $settings['deal-1']['per-amount'] . "/session" . $free . "," . $settings['deal-1']['paypal'];
+		
+		$free = $settings['deal-2']['free'] > 0 ? "+ " . $settings['deal-2']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-2']['title'] . " @ $" . $settings['deal-2']['per-amount'] . "/session" . $free . "," . $settings['deal-2']['paypal'];
+		
+		$free = $settings['deal-3']['free'] > 0 ? "+ " . $settings['deal-3']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-3']['title'] . " @ $" . $settings['deal-3']['per-amount'] . "/session" . $free . "," . $settings['deal-3']['paypal'];
+		$content .= "]:end]";
+	
+	echo print_wp_cart_action($content); ?>
+	
+	<p><span>note: all session packages have a 1 year expiry date once purchased</span></p>
+	<?php 
+		return ob_get_clean();
+	}	
+	
+	public function shortcode_student() {
+		$settings = get_option( 'student_settings' );
 
-	/**
-	 * NOTE:  Filters are points of execution in which WordPress modifies data
-	 *        before saving it or sending it to the browser.
-	 *
-	 *        Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// TODO: Define your filter hook callback here
-	}
+		dbgx_trace_var($settings);
+		ob_start();
+		?>
+		<article id='monthly-deals' class=''>
+		<h2><?php echo $settings['deal-title'] ?></h2>
+		<ul>
+			<li>
+				<strong><?php echo $settings['deal-1']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-1']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-1']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-1']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li>
+			<li>
+				<strong><?php echo $settings['deal-2']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-2']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-2']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-2']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li><li>
+				<strong><?php echo $settings['deal-3']['title'] ?></strong>
+				<p>@ $<?php echo $settings['deal-3']['per-amount'] ?>/session</p>
+				<?php
+					if ( $settings['deal-3']['free'] > 0 ) { ?>
+						<p><?php echo $settings['deal-3']['free'] ?> Free Session(s)</p>
+				<?php } ?>
+			</li>
+		</ul>
+	</article>
+		
+	<?php 
+		$content = "[wp_cart:Student Deals:price:[Options";
+		
+		$free = $settings['deal-1']['free'] > 0 ? " + " . $settings['deal-1']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-1']['title'] . " @ $" . $settings['deal-1']['per-amount'] . "/session" . $free . "," . $settings['deal-1']['paypal'];
+		
+		$free = $settings['deal-2']['free'] > 0 ? "+ " . $settings['deal-2']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-2']['title'] . " @ $" . $settings['deal-2']['per-amount'] . "/session" . $free . "," . $settings['deal-2']['paypal'];
+		
+		$free = $settings['deal-3']['free'] > 0 ? "+ " . $settings['deal-3']['free'] . " Free Session(s)" : "";
+		$content .= "|" . $settings['deal-3']['title'] . " @ $" . $settings['deal-3']['per-amount'] . "/session" . $free . "," . $settings['deal-3']['paypal'];
+		$content .= "]:end]";
+	
+	echo print_wp_cart_action($content); ?>
+	
+	<p><span>note: all session packages have a 1 year expiry date once purchased</span></p>
+	<?php 
+		return ob_get_clean();
+	}	
+
 
 }

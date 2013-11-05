@@ -1,4 +1,4 @@
-=== TODO: Plugin Name ===
+=== TODO: Bob Smibert Deals ===
 Contributors: (this should be a list of wordpress.org userids)
 Donate link: http://example.com/
 Tags: comments, spam

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name.
+ * Bob Smibert Deals.
  *
  * @package   Bob_Smibert_Deals_Admin
  * @author    Your Name <email@example.com>
@@ -70,15 +70,8 @@ class Bob_Smibert_Deals_Admin {
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( __FILE__ ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
-
-		/*
-		 * Define custom functionality.
-		 *
-		 * Read more about actions and filters:
-		 * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		 */
-		add_action( 'TODO', array( $this, 'action_method_name' ) );
-		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
+		
+		add_action( 'admin_init', array( $this, 'prep_settings' ) );
 
 	}
 
@@ -169,13 +162,201 @@ class Bob_Smibert_Deals_Admin {
 		 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 		 */
 		$this->plugin_screen_hook_suffix = add_options_page(
-			__( 'Page Title', $this->plugin_slug ),
-			__( 'Menu Text', $this->plugin_slug ),
+			__( 'Bob Smibert Deals', $this->plugin_slug ),
+			__( 'Bob Smibert Deals', $this->plugin_slug ),
 			'manage_options',
 			$this->plugin_slug,
-			array( $this, 'display_plugin_admin_page' )
+			array( $this, 'my_options_page' )
 		);
-
+	}
+	
+	function prep_settings() {
+		register_setting( 'bob-smibert-deals-group', 'settings' );
+		register_setting( 'bob-smibert-deals-group', 'student_settings' );	
+		/*
+		 * Monthly Deal
+		 */
+		add_settings_section( 
+			'section-one' , 
+			'Monthly Deal', 
+			array( $this, 'section_one_callback' ), 
+			$this->plugin_slug 
+		);
+		
+		add_settings_field( 
+			'deal-title', 
+			'Monthly Deal Title',
+			array( $this, 'simple_text_input' ), 
+			$this->plugin_slug, 
+			'section-one',
+			array( 
+				'id' => 'deal-title',
+				'settings' => 'settings'
+			)
+		);
+		
+		add_settings_field(
+			'deal-1',
+			'Deal 1 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-one',
+			array(
+				'id' => 'deal-1',
+				'settings' => 'settings'
+			)
+		);
+		add_settings_field(
+			'deal-2',
+			'Deal 2 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-one',
+			array( 
+				'id' => 'deal-2',
+				'settings' => 'settings'
+			) 
+		);
+		add_settings_field( 
+			'deal-3', 
+			'Deal 3 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-one',
+			array( 
+				'id' => 'deal-3',
+				'settings' => 'settings'
+			) 
+		);
+		
+		/*
+		 * Student Deal
+		 */
+		add_settings_section( 
+			'section-student', 
+			'Student Deal', 
+			array( $this, 'section_student_callback' ), 
+			$this->plugin_slug 
+		);
+		
+		add_settings_field( 
+			'deal-title', 
+			'Student Deal Title',
+			array( $this, 'simple_text_input' ), 
+			$this->plugin_slug, 
+			'section-student',
+			array( 
+				'id' => 'deal-title',
+				'settings' => 'student_settings'
+			)
+		);
+		
+		add_settings_field(
+			'deal-1',
+			'Deal 1 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-student',
+			array(
+				'id' => 'deal-1',
+				'settings' => 'student_settings'
+			)
+		);
+		add_settings_field(
+			'deal-2',
+			'Deal 2 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-student',
+			array( 
+				'id' => 'deal-2',
+				'settings' => 'student_settings'
+			) 
+		);
+		add_settings_field( 
+			'deal-3', 
+			'Deal 3 Title',
+			array( $this, 'my_text_input' ), 
+			$this->plugin_slug, 
+			'section-student',
+			array( 
+				'id' => 'deal-3',
+				'settings' => 'student_settings'
+			) 
+		);	
+	}
+	
+	function section_one_callback() {
+	    echo 'Some help text goes here.';
+	}
+	
+	function section_student_callback() {
+	    echo 'Some help text goes here.';
+	}
+	
+	function my_text_input( $args ) {
+		$settings_name = esc_attr( $args['settings'] );
+		$settings = (array) get_option( $settings_name );
+		
+		$id = esc_attr( $args['id'] );
+	    $value = esc_attr( $settings[$id]['title'] );
+	    echo "<input type='text' name='" . $settings_name . "[$id][title]' value='$value' />";
+	    
+	    $this->text_input(
+	    	'$ per Session:',  	// label
+	    	'per-amount',		// attr name
+	    	$id,				// id from above,
+	    	$settings_name,
+	    	$settings
+	    );
+	    
+	    $this->text_input(
+	    	'# Free Sessions:',  // label
+	    	'free',				// attr name
+	    	$id,				// id from above
+	    	$settings_name,
+	    	$settings
+	    );
+	    
+	    $this->text_input(
+	    	'Paypal Amount:',  	// label
+	    	'paypal',			// attr name
+	    	$id,				// id from above
+	    	$settings_name,
+	    	$settings
+	    );
+	}
+	
+	function text_input($label, $attr, $id, $settings_name, $settings) {
+		$name = $settings_name . "[$id][$attr]";
+		$value = esc_attr( $settings[$id][$attr] );
+		
+		echo "<label for='$name'>$label</label>";
+	    echo "<input type='text' name='$name' value='$value' />";
+	}
+	
+	function simple_text_input( $args ) {
+		$settings_name = esc_attr( $args['settings'] );
+		$settings = (array) get_option( $settings_name );
+		
+		$id = esc_attr( $args['id'] );
+	    $value = esc_attr( $settings[$id] );
+		$name = $settings_name . "[$id]";
+		
+	    echo "<input type='text' name='$name' value='$value' />";
+	}
+	
+	function my_options_page() {
+	    ?>
+	    <div class="wrap">
+	        <h2>Bob Smiberts Deals</h2>
+	        <form action="options.php" method="POST">
+	            <?php settings_fields( 'bob-smibert-deals-group' ); ?>
+	            <?php do_settings_sections( $this->plugin_slug ); ?>
+	            <?php submit_button(); ?>
+	        </form>
+	    </div>
+	    <?php
 	}
 
 	/**
@@ -204,29 +385,18 @@ class Bob_Smibert_Deals_Admin {
 	}
 
 	/**
-	 * NOTE:     Actions are points in the execution of a page or process
-	 *           lifecycle that WordPress fires.
-	 *
-	 *           Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
+	 * Render the settings page for this plugin.
 	 *
 	 * @since    1.0.0
 	 */
-	public function action_method_name() {
-		// TODO: Define your action hook callback here
-	}
-
-	/**
-	 * NOTE:     Filters are points of execution in which WordPress modifies data
-	 *           before saving it or sending it to the browser.
-	 *
-	 *           Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// TODO: Define your filter hook callback here
+	public function initialize_theme_options() {
+		// First, we register a section. This is necessary since all future options must belong to one.  
+	    add_settings_section(
+	    	'general_settings_section',         // ID used to identify this section and with which to register options  
+	        'Deal Options',                  // Title to be displayed on the administration page  
+	        array( $this, 'general_options_callback'), // Callback used to render the description of the section  
+	        'general'                           // Page on which to add this section of options  
+	    );  
 	}
 
 }

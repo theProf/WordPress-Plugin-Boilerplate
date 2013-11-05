@@ -6,13 +6,13 @@
  * also follow WordPress Coding Standards and PHP best practices.
  *
  * @package   Bob_Smibert_Deals
- * @author    Your Name <email@example.com>
+ * @author    theProf <email@example.com>
  * @license   GPL-2.0+
  * @link      http://example.com
  * @copyright 2013 Your Name or Company Name
  *
  * @wordpress-plugin
- * Plugin Name:       TODO
+ * Plugin Name:       Bob Smibert Deals
  * Plugin URI:        TODO
  * Description:       TODO
  * Version:           1.0.0

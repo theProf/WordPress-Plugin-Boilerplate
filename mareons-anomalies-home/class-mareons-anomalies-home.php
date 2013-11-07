@@ -281,49 +281,67 @@ class Mareons_Anomalies_Home {
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'js/public.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 	}
 
-	/**
-	 * NOTE:  Filters are points of execution in which WordPress modifies data
-	 *        before saving it or sending it to the browser.
-	 *
-	 *        Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function test_filter($html_style) {
-		dbgx_trace_var( $html_style );
-		dbgx_trace_var( $post );
-		dbgx_trace_var( $posts );
-		dbgx_trace_var( $page );
-	}
 	
 	
 	// define the shortcode function
-	public function portfolio_home_shortcode( $atts ) {
+	public function portfolio_home_shortcode( $attr ) {
+		$post = get_post();
+		static $instance = 0;
+		$instance++;
+
+		if ( ! empty( $attr['ids'] ) ) {
+			// 'ids' is explicitly ordered, unless you specify otherwise.
+			if ( empty( $attr['orderby'] ) )
+				$attr['orderby'] = 'post__in';
+			$attr['include'] = $attr['ids'];
+		}
 		
-		STATIC $i=0;
-		
-		//has a custom post id been declared or should we use current page ID?
-		if ( ! $id ) { $id = get_the_ID(); }
+		dbgx_trace_var($attr);
 	
-		//count the attachments
-		$attachments = get_children( array ( 'post_parent' => $id, 'post_type' => 'attachment', 'post_mime_type' => 'image' ) );
+		// We're trusting author input, so let's at least make sure it looks like a valid orderby statement
+		if ( isset( $attr['orderby'] ) ) {
+			$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+			if ( !$attr['orderby'] )
+				unset( $attr['orderby'] );
+		}
+	
+		extract(shortcode_atts(array(
+			'order'      => 'ASC',
+			'orderby'    => 'menu_order ID',
+			'id'         => $post->ID,
+			'itemtag'    => 'dl',
+			'icontag'    => 'dt',
+			'captiontag' => 'dd',
+			'columns'    => 3,
+			'size'       => 'medium',
+			'include'    => '',
+			'exclude'    => ''
+		), $attr));
+		
+		$size = 'medium';
+	
+		$id = intval($id);
+		if ( 'RAND' == $order )
+			$orderby = 'none';
+	
+		if ( !empty($include) ) {
+			$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+	
+			$attachments = array();
+			foreach ( $_attachments as $key => $val ) {
+				$attachments[$val->ID] = $_attachments[$key];
+			}
+		} elseif ( !empty($exclude) ) {
+			$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		} else {
+			$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		}		
 		
 		$ps_count = count( $attachments );
 				
 		$html .= '<div id="mareon-anomalies-home-'.$i.'" class="mareon-anomalies-home">';
 	
 		$slideID = 0;
-		$size = 'medium';
-		
-		$attachments = get_posts( array( 'order'          => 'ASC',
-			'orderby' 		 => 'menu_order ID',
-			'post_type'      => 'attachment',
-			'post_parent'    => $id,
-			'post_mime_type' => 'image',
-			'post_status'    => null,
-			'numberposts'    => -1,
-			'size'			 => $size) );
 	
 		if ( $attachments ) { //if attachments are found, run the home
 		
@@ -355,21 +373,12 @@ class Mareons_Anomalies_Home {
 				$html .= '<img src="' . $img[0] . '" alt="' . $alttext . '" />';		
 										
 				$html .= '<div class="home-meta">';
-				$title = $attachment->post_title;
-				if ( $title ) { 
-					$html .= '<p class="home-title">'.$title.'</p>'; 
-				} 
 				
 				$caption = $attachment->post_excerpt;
 				if ( $caption ) { 
 					$html .= '<p class="home-caption">'.$caption.'</p>'; 
 				}
-				
-				$description = $attachment->post_content;
-				if ( $description ) { 
-					$html .= '<div class="home-description">'. wpautop( $description ) .'</div>'; 
-				}
-				
+								
 				$html .= '</div>
 				</a>
 				</div>

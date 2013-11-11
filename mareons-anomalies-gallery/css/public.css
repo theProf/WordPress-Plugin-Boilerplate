@@ -1,1 +1,111 @@
 /* This stylesheet is used to style the public view of the plugin. */
+
+.mareon-anomalies-gallery .gallery-thumbnails {
+	float: right;
+	width: 20%;
+	box-sizing: border-box;
+	margin: 0;
+	display: inline-block;
+	padding-left: 10px;
+	text-align: right;
+}
+
+.mareon-anomalies-gallery .gallery-full {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 80%;
+	overflow: hidden;
+	position: relative;
+	white-space: nowrap;
+	max-width: 600px;
+	max-height: 520px;
+	display: block;
+}
+
+.mareon-anomalies-gallery .gallery-full .gallery-content {
+	display: block;
+	left: 100%;
+	width: 100%;
+}
+
+.mareon-anomalies-gallery > .gallery-content {
+	display: inline-block;
+	vertical-align: top;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 10px;
+	width: 25%;
+	margin-left: -4px;
+}
+
+.mareon-anomalies-gallery .gallery-content > a {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	width: 50%;
+	display: inline-block;
+	padding-right: 5px;
+}
+
+.mareon-anomalies-gallery .gallery-content > a::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 5px;
+	left: 0;
+	background-color: rgba(41, 170, 225, .5);
+	z-index: 2;
+}
+
+.mareon-anomalies-gallery .gallery-content-thumbnail.current > a::before,
+.mareon-anomalies-gallery .gallery-content-thumbnail > a:hover::before {
+	display: none;
+}
+
+.mareon-anomalies-gallery .gallery-content-thumbnail.current > a  > img {
+	border: 2px solid #0C71B9;
+}
+
+.mareon-anomalies-gallery .gallery-content > a > img {
+	width: 100%;
+}
+
+.mareon-anomalies-gallery img {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.mareon-anomalies-gallery .gallery-meta {
+	left: 100%;
+	background-color: rgba(255,255,255, .5);
+	text-align: center;
+	transition: bottom 1s;
+	padding: 10px;
+}
+
+/** Gallery Info
+*******************/
+
+.mareon-anomalies-gallery .gallery-info {
+	clear: both;
+	display: block;
+	position: relative;
+}
+
+.mareon-anomalies-gallery .gallery-info .gallery-title {
+	font-size: 20px;
+}
+
+.mareon-anomalies-gallery .gallery-info .gallery-price {
+	margin: 0;
+	padding: 0;
+}
+
+.mareon-anomalies-gallery .gallery-info .gallery-price::before {
+	content: "$";
+	display: inline;
+}

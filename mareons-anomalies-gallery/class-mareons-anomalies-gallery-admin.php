@@ -64,21 +64,15 @@ class Mareons_Anomalies_Gallery_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
-		// Add the options page and menu item.
-		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
-
-		// Add an action link pointing to the options page.
-		$plugin_basename = plugin_basename( plugin_dir_path( __FILE__ ) . $this->plugin_slug . '.php' );
-		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
-
 		/*
 		 * Define custom functionality.
-		 *
-		 * Read more about actions and filters:
-		 * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		 */
-		add_action( 'TODO', array( $this, 'action_method_name' ) );
-		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
+		
+		// now attach our function to the hook
+		add_filter("attachment_fields_to_edit", array($this, "add_image_attachment_fields_to_edit"), null, 2);
+		
+		// now attach our function to the hook.
+		add_filter("attachment_fields_to_save", array($this, "add_image_attachment_fields_to_save"), null, 2);
 
 	}
 
@@ -202,31 +196,33 @@ class Mareons_Anomalies_Gallery_Admin {
 		);
 
 	}
-
-	/**
-	 * NOTE:     Actions are points in the execution of a page or process
-	 *           lifecycle that WordPress fires.
-	 *
-	 *           Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// TODO: Define your action hook callback here
+	
+	/* For adding custom field to gallery popup */
+	function add_image_attachment_fields_to_edit($form_fields, $post) {
+	  // $form_fields is a an array of fields to include in the attachment form
+	  // $post is nothing but attachment record in the database
+	  //     $post->post_type == 'attachment'
+	  // attachments are considered as posts in WordPress. So value of post_type in wp_posts table will be attachment
+	  // now add our custom field to the $form_fields array
+	  // input type="text" name/id="attachments[$attachment->ID][custom1]"
+	  $form_fields["mareon_link"] = array(
+	    "label" => __("Mareon Link"),
+	    "input" => "text", // this is default if "input" is omitted
+	    "value" => get_post_meta($post->ID, "_mareon_link", true),
+	                "helps" => __("Page link on homepage."),
+	  );
+	   return $form_fields;
 	}
-
-	/**
-	 * NOTE:     Filters are points of execution in which WordPress modifies data
-	 *           before saving it or sending it to the browser.
-	 *
-	 *           Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// TODO: Define your filter hook callback here
+	
+	function add_image_attachment_fields_to_save($post, $attachment) {
+	  // $attachment part of the form $_POST ($_POST[attachments][postID])
+	        // $post['post_type'] == 'attachment'
+	  if( isset($attachment['mareon_link']) ){
+	    // update_post_meta(postID, meta_key, meta_value);
+	    update_post_meta($post['ID'], '_mareon_link', $attachment['mareon_link']);
+	  }
+	  return $post;
 	}
-
+	
+	
 }

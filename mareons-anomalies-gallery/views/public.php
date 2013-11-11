@@ -14,3 +14,19 @@
 ?>
 
 <!-- This file is used to markup the public facing aspect of the plugin. -->
+<div class="mareons-anomalies-gallery">
+	
+</div>
+
+
+
+<script type="text/template">
+<dl class="gallery-item">
+	<dt class="gallery-icon landscape">
+		<a href="http://mareonsanomalies.ca/home-hide/baby-2"><img width="150" height="150" src="http://mareonsanomalies.ca/wp-content/uploads/2013/10/baby-150x150.jpg" class="attachment-thumbnail" alt="Baby"></a>
+	</dt>
+	<dd class="wp-caption-text gallery-caption">
+	Baby
+	</dd>
+</dl>
+</script>

@@ -75,12 +75,12 @@ class Mareons_Anomalies_Gallery {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		/* Define custom functionality.
-		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
+		/*
+		 * Custom Filters
 		 */
-		add_action( 'TODO', array( $this, 'action_method_name' ) );
-		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
 
+		// create the shortcode
+		add_shortcode( 'mareon_anomalies_gallery', array( $this, 'portfolio_gallery_shortcode') );
 	}
 
 	/**
@@ -278,31 +278,174 @@ class Mareons_Anomalies_Gallery {
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'js/public.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 	}
+	
+	// define the shortcode function
+	public function portfolio_gallery_shortcode( $attr ) {
+		$post = get_post();
+dbgx_trace_var($post);
+		static $instance = 0;
+		$instance++;
 
-	/**
-	 * NOTE:  Actions are points in the execution of a page or process
-	 *        lifecycle that WordPress fires.
-	 *
-	 *        Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// TODO: Define your action hook callback here
-	}
+		if ( ! empty( $attr['ids'] ) ) {
+			// 'ids' is explicitly ordered, unless you specify otherwise.
+			if ( empty( $attr['orderby'] ) )
+				$attr['orderby'] = 'post__in';
+			$attr['include'] = $attr['ids'];
+		}
+	
+		// We're trusting author input, so let's at least make sure it looks like a valid orderby statement
+		if ( isset( $attr['orderby'] ) ) {
+			$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+			if ( !$attr['orderby'] )
+				unset( $attr['orderby'] );
+		}
+	
+		extract(shortcode_atts(array(
+			'order'      => 'ASC',
+			'orderby'    => 'menu_order ID',
+			'id'         => $post->ID,
+			'itemtag'    => 'dl',
+			'icontag'    => 'dt',
+			'captiontag' => 'dd',
+			'columns'    => 3,
+			'size'       => 'thumbnail',
+			'include'    => '',
+			'exclude'    => ''
+		), $attr));
+		
+		$size = 'thumbnail';
+	
+		$id = intval($id);
+		if ( 'RAND' == $order )
+			$orderby = 'none';
+	
+		if ( !empty($include) ) {
+			$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+	
+			$attachments = array();
+			foreach ( $_attachments as $key => $val ) {
+				$attachments[$val->ID] = $_attachments[$key];
+			}
+		} elseif ( !empty($exclude) ) {
+			$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		} else {
+			$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		}		
+		
+		$ps_count = count( $attachments );
+				
+		$gallery .= '<div id="mareon-anomalies-gallery-'.$i.'" class="mareon-anomalies-gallery">';
+	
+		$slideID = 0;
+	
+		if ( $attachments ) { //if attachments are found, run the gallery
+			$gallery .= '<div class="gallery-thumbnails">';
+			//begin the gallery loop
+			foreach ( $attachments as $attachment ) {
+				$current_class = 0 == $slideID ? "current" : "";
+				$gallery .= '<div class="gallery-content gallery-content-thumbnail ' . $current_class . '">';
+					 										
+				$gallery .= '<a href="javascript: void(0);">';
+				
+				/*
+				 * This is the part of the loop that actually returns the images
+				 */
+					
+				$img =  wp_get_attachment_image_src( $attachment->ID, $size );
+						
+				$gallery .= '<img src="' . $img[0] . '" alt="' . $alttext . '"/>';		
+										
+				$gallery .= '</a>
+				</div>
+				';
+				
+				$slideID++;
+						
+			}  // end gallery loop
+			$gallery .= '</div>';
+		} // end if ( $attachments)
+		
+		// main images
+		$size = 'fullsize'; 
+		
+		if ( !empty($include) ) {
+			$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+	
+			$attachments = array();
+			foreach ( $_attachments as $key => $val ) {
+				$attachments[$val->ID] = $_attachments[$key];
+			}
+		} elseif ( !empty($exclude) ) {
+			$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		} else {
+			$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'size' => $size) );
+		}		
+		
+	
+		if ( $attachments ) { //if attachments are found, run the gallery
+			$gallery .= '<div class="gallery-full">';
+			$info .= '<div class="gallery-info">';
+			$slideID = 0;
+			//begin the gallery loop
+			foreach ( $attachments as $attachment ) {
+				$current_class = 0 == $slideID ? "current" : "";
+				
+				$alttext = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
+		
+				if ( ! $alttext ) {
+					$alttext = $attachment->post_title;
+				}
+					
+				$gallery .= '<div class="gallery-content ' . $current_class . '">';
+				
+				/*
+				 * This is the part of the loop that actually returns the images
+				 */
+					
+				$img =  wp_get_attachment_image_src( $attachment->ID, $size );
+						
+				$gallery .= '<img src="' . $img[0] . '" alt="' . $alttext . '" />';		
+										
+				$info .= '<div class="gallery-meta ' . $current_class . '">';
+				/*
+$title = $attachment->post_title;
+				if ( $title ) { 
+					$info .= '<p class="gallery-title">'.$title.'</p>'; 
+				} 
+*/
+				
+				$caption = $attachment->post_excerpt;
+				if ( $caption ) { 
+					$info .= '<p class="gallery-title">'.$caption.'</p>'; 
+				}
+				
+				$description = $attachment->post_content;
+				if ( $description ) { 
+					$info .= '<div class="gallery-description">'. wpautop( $description ) .'</div>'; 
+				}
+				$info .= '</div>';
+				
+				$gallery .= '</div>
+				';
+				
+				$slideID++;
+						
+			}  // end gallery loop
+			$info .= '</div>';
+			$gallery .= '</div>';
+			$gallery .= $info;
+		} // end if ( $attachments)
+	
+		$gallery .= "</div><!--#mareon-anomalies-gallery-->";
+				
+		$gallery .='</div><!--#mareon-anomalies-gallery-wrapper-->';
+	
+		$i++;
+	
+		return $gallery;	//that's the gallery
+		
+		
+	} //ends the  function
 
-	/**
-	 * NOTE:  Filters are points of execution in which WordPress modifies data
-	 *        before saving it or sending it to the browser.
-	 *
-	 *        Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// TODO: Define your filter hook callback here
-	}
 
 }

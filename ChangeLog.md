@@ -12,8 +12,8 @@
 * Add admin class (grappler)
 * Update $plugin_slug comment (barryceelen)
 * Place options page under 'Settings' in stead of 'Plugins' menu (barryceelen)
-* Replace plugin-name with $this->plugin_slug in add_action_links (barryceelen)
-* Removes 'Change 'plugin-name' to the name of your plugin' from DocBlock (barryceelen)
+* Replace heather-ruthig-gallery with $this->plugin_slug in add_action_links (barryceelen)
+* Removes 'Change 'heather-ruthig-gallery' to the name of your plugin' from DocBlock (barryceelen)
 * Mention uninstall.php in code comment (barryceelen)
 * Removes reference to register_uninstall_hook from code comment (barryceelen)
 * Initialize plugin on plugins_loaded hook (barryceelen)
@@ -55,7 +55,7 @@
 * Updating the way the plugin terminates execution if accessed directly
 * Updating code comments, clearing extraneous whitespace
 * Renaming files to be more consistent with the example name of the plugin
-* Renaming 'plugin-boilerplate' to 'plugin-name' to be more consistent with the naming conventions of the class file
+* Renaming 'plugin-boilerplate' to 'heather-ruthig-gallery' to be more consistent with the naming conventions of the class file
 * Adding a sample screenshot to match the example WordPress Plugin Repository `readme.txt`
 * Removing the plugin version constant in favor of a property in the plugin class
 * Adding proper page-level DocBlocks

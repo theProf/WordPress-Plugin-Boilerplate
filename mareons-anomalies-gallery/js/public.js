@@ -4,13 +4,13 @@
 	$(function () {
 
 		// Place your public-facing JavaScript here
-		$('.mareon-anomalies-gallery .gallery-full .gallery-content:not(.current), .mareon-anomalies-gallery .gallery-info .gallery-meta:not(.current)').hide();
+		$('.heather-ruthig-gallery .gallery-full .gallery-content:not(.current), .heather-ruthig-gallery .gallery-info .gallery-meta:not(.current)').hide();
 		
 		// bind image click event for switching image
-		$('body').on('click', '.mareon-anomalies-gallery .gallery-content-thumbnail:not(.current) a', function(event) {
-			var gallery = $(".mareon-anomalies-gallery");
+		$('body').on('click', '.heather-ruthig-gallery .gallery-content-thumbnail:not(.current) a', function(event) {
+			var gallery = $(".heather-ruthig-gallery");
 			// get currents
-			var currents = $(".mareon-anomalies-gallery .current");
+			var currents = $(".heather-ruthig-gallery .current");
 			var thumb = currents.filter(".gallery-content-thumbnail");
 			currents = currents.not(thumb);
 			

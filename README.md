@@ -17,11 +17,11 @@ The WordPress Plugin Boilerplate serves as a foundation and aims to provide a cl
 The WordPress Plugin Boilerplate includes the following files:
 
 * This README, a ChangeLog, and a `gitignore` file.
-* A subdirectory called `plugin-name`. This represents the core plugin file.
+* A subdirectory called `heather-ruthig-gallery`. This represents the core plugin file.
 
 ## Installation
 
-1. Copy the `plugin-name` directory into your `wp-content/plugins` directory
+1. Copy the `heather-ruthig-gallery` directory into your `wp-content/plugins` directory
 2. Navigate to the *Plugins* dashboard page
 3. Locate the menu item that reads *TODO*
 4. Click on *Activate*

@@ -334,7 +334,8 @@ dbgx_trace_var($post);
 		
 		$ps_count = count( $attachments );
 				
-		$gallery .= '<div id="mareon-anomalies-gallery-'.$i.'" class="mareon-anomalies-gallery">';
+		$gallery .= '<h1 class="home-banner">We provide a specialized gift for you, your business and corporation</h1>';
+		$gallery .= '<div id="heather-ruthig-gallery-'.$i.'" class="heather-ruthig-gallery">';
 	
 		$slideID = 0;
 	
@@ -436,9 +437,9 @@ $title = $attachment->post_title;
 			$gallery .= $info;
 		} // end if ( $attachments)
 	
-		$gallery .= "</div><!--#mareon-anomalies-gallery-->";
+		$gallery .= "</div><!--#heather-ruthig-gallery-->";
 				
-		$gallery .='</div><!--#mareon-anomalies-gallery-wrapper-->';
+		$gallery .='</div><!--#heather-ruthig-gallery-wrapper-->';
 	
 		$i++;
 	

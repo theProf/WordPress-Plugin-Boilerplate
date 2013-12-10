@@ -7,9 +7,9 @@
 * Removed the trailing slash (@jameswlane)
 * Revert "Extended and aligned comment header" (@franz-josef-kaiser)
 * Extended and aligned comment header (@franz-josef-kaiser)
-* Update class-plugin-name-admin.php (@rockaut)
+* Update class-corbyss-mailer-admin.php (@rockaut)
 * Replaced deleted comment block (@akshayraje)
-* Updated plugin-name.php to get all name replacement changes at one place (@akshayraje)
+* Updated corbyss-mailer.php to get all name replacement changes at one place (@akshayraje)
 * Fix textdomain not loading (@neverything)
 * Fix $plugin_basename to allow plugin_action_links (@neverything)
 
@@ -21,12 +21,12 @@
 * Moving all public-specific functionality into the public subdirectory
 * Moving all admin-specific functionality into the admin subdirectory
 * Loading the admin class only if the dashboard is being loaded
-* Added a TODO for Plugin_Name::Version (grappler)
-* Replacing plugin-name with plugin_slug and removed a TODO (grappler)
+* Added a TODO for Corbyss_Mailer::Version (grappler)
+* Replacing corbyss-mailer with plugin_slug and removed a TODO (grappler)
 * Added a 'TODO' to prmpt the user to change the plugin name (haleeben)
-* Updating the class-plugin-name.admin.php (will83)
+* Updating the class-corbyss-mailer.admin.php (will83)
 * Updating references to the languages directory
-* Update plugin-name.pos (grappler)
+* Update corbyss-mailer.pos (grappler)
 * Including more information about the GitHub Upater
 * Updating the read me to include the new features of the boilerplate
 * Adding whitespace between the header and the markup of the views
@@ -40,8 +40,8 @@
 * Add admin class (grappler)
 * Update $plugin_slug comment (barryceelen)
 * Place options page under 'Settings' in stead of 'Plugins' menu (barryceelen)
-* Replace plugin-name with $this->plugin_slug in add_action_links (barryceelen)
-* Removes 'Change 'plugin-name' to the name of your plugin' from DocBlock (barryceelen)
+* Replace corbyss-mailer with $this->plugin_slug in add_action_links (barryceelen)
+* Removes 'Change 'corbyss-mailer' to the name of your plugin' from DocBlock (barryceelen)
 * Mention uninstall.php in code comment (barryceelen)
 * Removes reference to register_uninstall_hook from code comment (barryceelen)
 * Initialize plugin on plugins_loaded hook (barryceelen)
@@ -59,7 +59,7 @@
 * Added multisite activation/deactivation functionality. (thuijssoon)
 * Adding index.php with silence is golden security method (danielantunes)
 * Added empty array for dependency to fix version number. (tokkonopapa)
-* Updating `PluginName` to `Plugin_Name` to follow the WordPress Coding Standards
+* Updating `PluginName` to `Corbyss_Mailer` to follow the WordPress Coding Standards
 * Removing some whitespace in the first line of the README file
 * Removing an unnecessary apostrophe from the Boilerplate README.txt
 
@@ -80,7 +80,7 @@
 * Updating the way the plugin terminates execution if accessed directly
 * Updating code comments, clearing extraneous whitespace
 * Renaming files to be more consistent with the example name of the plugin
-* Renaming 'plugin-boilerplate' to 'plugin-name' to be more consistent with the naming conventions of the class file
+* Renaming 'plugin-boilerplate' to 'corbyss-mailer' to be more consistent with the naming conventions of the class file
 * Adding a sample screenshot to match the example WordPress Plugin Repository `readme.txt`
 * Removing the plugin version constant in favor of a property in the plugin class
 * Adding proper page-level DocBlocks

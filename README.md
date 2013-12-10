@@ -17,11 +17,11 @@ The WordPress Plugin Boilerplate serves as a foundation and aims to provide a cl
 The WordPress Plugin Boilerplate includes the following files:
 
 * This README, a ChangeLog, and a `gitignore` file.
-* A subdirectory called `plugin-name` that represents the core plugin file.
+* A subdirectory called `corbyss-mailer` that represents the core plugin file.
 
 ## Installation
 
-1. Copy the `plugin-name` directory into your `wp-content/plugins` directory
+1. Copy the `corbyss-mailer` directory into your `wp-content/plugins` directory
 2. Navigate to the *Plugins* dashboard page
 3. Locate the menu item that reads *TODO*
 4. Click on *Activate*
@@ -93,9 +93,9 @@ For reference, [here's a discussion](http://make.wordpress.org/themes/2013/03/04
 
 Note that if you include your own classes, or third-party libraries, there are three locations in which said files may go:
 
-1. `plugin-name/includes` is where shared functionality should be placed between `public` and `admin`
-2. `plugin-name/admin/includes` is where dashboard-specific classes and dependencies should be placed
-3. `plugin-name/public/includes` is where public-specific classes and dependencies should be placed
+1. `corbyss-mailer/includes` is where shared functionality should be placed between `public` and `admin`
+2. `corbyss-mailer/admin/includes` is where dashboard-specific classes and dependencies should be placed
+3. `corbyss-mailer/public/includes` is where public-specific classes and dependencies should be placed
 
 ## Assets
 
